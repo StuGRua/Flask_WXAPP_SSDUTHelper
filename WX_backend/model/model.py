@@ -57,6 +57,7 @@ class User(db.Model):
             return
         return User.query.get(data['id'])
 
+
 # 验证密码/token模块
 @auth.verify_password
 def verify_password(userid_or_token, password):
@@ -71,93 +72,15 @@ def verify_password(userid_or_token, password):
     g.user = user
     return True
 
-# class user_info(db.Model):
-#     __tablename__ = 'user_info'
-#     userid = db.Column(db.BIGINT, primary_key=True, nullable=False)
-#     phonenumber = db.Column(BIGINT, primary_key=True, nullable=False)
-#     user_name = db.Column(db.VARCHAR(255))
-#     major = db.Column(db.VARCHAR(255))
-#     grade = db.Column(db.VARCHAR(255))
-#     user_status = db.Column(db.VARCHAR(255))
-#
-#     def to_dict(self):
-#         return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
-#
-#
-# class order_list(db.Model):
-#     __tablename__ = 'order_list'
-#     order_id = db.Column(db.VARCHAR(255), primary_key=True, nullable=False)
-#     pub_id = db.Column(db.BIGINT, nullable=False)
-#     rec_id = db.Column(db.BIGINT)
-#     start_time = db.Column(db.DATETIME)
-#     end_time = db.Column(db.DATETIME)
-#     order_stat = db.Column(db.VARCHAR(255))
-#     order_payment = db.Column(db.VARCHAR(255))
-#     order_info = db.Column(db.VARCHAR(255))
-#
-#     def to_dict(self):
-#         return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
-#
-#
-# # 字符串转二进制
-# def b_encode(s):
-#     return (''.join([bin(ord(c)).replace('0b', '') for c in s]))
-#
-#
-# # 二进制转字符串
-# def b_decode(s):
-#     return (''.join([chr(i) for i in [int(b, 2) for b in s.split('')]]))
-#
-#
-# # 寻找用户是否存在
-# def search_user(id):
-#     result = user_info.query.filter_by(userid=id).first()
-#     if result is None:
-#         return (None)
-#     else:
-#         return (result.to_dict())
-#
-#
-# # 插入新用户
-# def insert_user(userid, phonenumber, user_name, major, grade, user_status):
-#     engine = create_engine(
-#         'mysql+mysqlconnector://StuG:x74rtw05@localhost:3306/wxapp')
-#     metadata = MetaData(engine)
-#     # 连接数据表
-#     order_table = Table('user_info', metadata, autoload=True)
-#     try:  # 创建 insert 对象
-#         ins = order_table.insert()
-#         # 绑定要插入的数据
-#         ins = ins.values(userid=userid, phonenumber=phonenumber, user_name=user_name, major=major, grade=grade,
-#                          user_status=user_status)
-#         # 连接引擎
-#         conn = engine.connect()
-#         # 执行语句
-#         result = conn.execute(ins)
-#         return True
-#     except:
-#         print(result)
-#         return (False)
-#
-#
-# # 插入新订单
-# def insert_order(order_id, pub_id, rec_id, start_time, end_time, order_stat, order_payment, order_info):
-#     engine = create_engine(
-#         'mysql+mysqlconnector://StuG:x74rtw05@localhost:3306/wxapp')
-#     metadata = MetaData(engine)
-#     # 连接数据表
-#     order_table = Table('order_info', metadata, autoload=True)
-#     try:  # 创建 insert 对象
-#         ins = order_table.insert()
-#         # 绑定要插入的数据
-#         ins = ins.values(order_id=order_id, rec_id=rec_id, pub_id=pub_id, start_time=start_time, end_time=end_time,
-#                          order_stat=order_stat, order_payment=order_payment,
-#                          order_info=order_info)
-#         # 连接引擎
-#         conn = engine.connect()
-#         # 执行语句
-#         result = conn.execute(ins)
-#         return True
-#     except:
-#         print(result)
-#         return (False)
+
+class Order(db.Model):
+    __tablename__ = 'order_list'
+    order_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    order_title = db.Column(db.String(32), nullable=False)
+    pub_id = db.Column(db.BIGINT)
+    rec_id = db.Column(db.String(32), default=-1)
+    start_time = db.Column(db.DATETIME)
+    end_time = db.Column(db.DATETIME)
+    order_stat = db.Column(db.String(32), default='未接受')
+    order_payment = db.Column(db.String(32), default='没有设置呢~')
+    order_info = db.Column(db.String(255), default='没有详细说明了哦')
